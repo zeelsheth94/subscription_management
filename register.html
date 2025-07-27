@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        .container { max-width: 400px; width: 100%; background-color: #ffffff; padding: 2rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151; }
+        .form-input { display: block; width: 100%; padding: 0.75rem 1rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; color: #1f2937; background-color: #f9fafb; transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
+        .form-input:focus { border-color: #2563eb; outline: 0; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25); }
+        .btn-primary { width: 100%; padding: 0.75rem 1.5rem; background-color: #2563eb; color: #ffffff; font-weight: 600; border-radius: 0.5rem; transition: background-color 0.15s ease-in-out; cursor: pointer; border: none; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .text-link { color: #2563eb; text-decoration: none; transition: color 0.15s ease-in-out; }
+        .text-link:hover { color: #1d4ed8; }
+        .message { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; font-weight: 500; text-align: center; }
+        .message.success { background-color: #d1fae5; color: #065f46; border: 1px solid #34d399; }
+        .message.error { background-color: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+        .error-message { color: #ef4444; font-size: 0.875rem; margin-top: -0.5rem; margin-bottom: 1rem; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Register</h2>
+        <form id="registerForm">
+            <div class="mb-4">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Choose a username" required>
+                <div id="usernameError" class="error-message"></div>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="your@example.com" required>
+                <div id="emailError" class="error-message"></div>
+            </div>
+            <div class="mb-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Minimum 6 characters" required>
+                <div id="passwordError" class="error-message"></div>
+            </div>
+            <button type="submit" class="btn-primary">Register</button>
+            <p class="text-center text-gray-600 text-sm mt-4">
+                Already have an account? <a href="login.html" class="text-link">Login here</a>
+            </p>
+            <div id="registerMessage" class="message hidden"></div>
+        </form>
+    </div>
+    <script src="register_validation.js"></script>
+</body>
+</html>

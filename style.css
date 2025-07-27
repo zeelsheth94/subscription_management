@@ -1,0 +1,246 @@
+:root {
+    --primary-color: #6a5acd;
+    --secondary-color: #f0f8ff;
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --white-color: #fff;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.form-container {
+    background-color: var(--white-color);
+    padding: 2rem 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 400px;
+}
+
+form h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-group .error {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none; /* Hidden by default */
+}
+
+.form-group.error input {
+    border-color: var(--error-color);
+}
+
+.form-group.success input {
+    border-color: var(--success-color);
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #584ab7;
+}
+
+.form-switch {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.form-switch a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.dashboard-section .container {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to a single column for mobile */
+    gap: 2rem;
+    padding: 2rem 20px;
+}
+
+/* On larger screens, use two columns */
+@media (min-width: 992px) {
+    .dashboard-section .container {
+        grid-template-columns: 1fr 2fr; /* One column for payments, two for the table */
+    }
+}
+
+.card.full-width-card {
+    grid-column: 1 / -1; /* Make this card span all columns */
+}
+
+@media (min-width: 992px) {
+    .card.full-width-card {
+        grid-column: auto; /* Revert on larger screens if needed, or specify span */
+        grid-column: 2 / 3;
+        grid-row: 1 / 3; /* Make it span two rows to align nicely */
+    }
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling on small screens */
+}
+
+.subscription-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.subscription-table th,
+.subscription-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.subscription-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.subscription-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.subscription-table .loading,
+.subscription-table .no-data,
+.subscription-table .error {
+    text-align: center;
+    color: #777;
+    padding: 2rem;
+    font-style: italic;
+}
+.controls-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    gap: 1rem;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 0.75rem;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+.search-bar .material-symbols-outlined {
+    color: #999;
+    margin-right: 0.5rem;
+}
+
+.search-bar input {
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-color: var(--primary-color);
+}
+/* 1. Define color variables for the default (light) theme */
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --card-bg-color: #f0f0f0;
+}
+
+/* 2. Define overrides for the dark theme */
+[data-theme='dark'] {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --card-bg-color: #1e1e1e;
+}
+
+/* 3. Apply the variables to your elements */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.card {
+  background-color: var(--card-bg-color);
+}

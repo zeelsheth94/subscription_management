@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Subscriptions</title>
+    <style>
+        /* General Body and Container Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, readable font */
+            display: flex;
+            flex-direction: column; /* Allow stacking of elements */
+            justify-content: flex-start; /* Align content to the top */
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            background-color: #e0f2f7; /* Light blue background */
+            margin: 0;
+            padding: 2rem 1rem; /* Add padding for content */
+            color: #333; /* Dark gray text color */
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased; /* Smoother font rendering */
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            background-color: #ffffff; /* White background for the main content box */
+            padding: 40px;
+            border-radius: 12px; /* Slightly more rounded corners */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Softer, deeper shadow */
+            text-align: center;
+            max-width: 900px; /* Wider container for table */
+            width: 90%; /* Responsive width */
+            border-top: 6px solid #28a745; /* Green top border for a "success" feel */
+            animation: fadeIn 0.8s ease-out; /* Fade-in animation for the container */
+            margin-bottom: 2rem; /* Space below container */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Heading Styling */
+        h1 {
+            color: #2c3e50; /* Darker blue-gray for heading */
+            margin-bottom: 35px;
+            font-size: 2.5em; /* Larger heading */
+            font-weight: 700; /* Bolder */
+            letter-spacing: 0.5px;
+        }
+
+        /* Paragraph Styling */
+        p {
+            font-size: 1.15em;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto; /* Allows horizontal scrolling on small screens */
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+
+        th {
+            background-color: #f9fafb; /* bg-gray-50 */
+            font-weight: 600; /* font-semibold */
+            color: #4b5563; /* text-gray-700 */
+            text-transform: uppercase;
+            font-size: 0.75rem; /* text-xs */
+            letter-spacing: 0.05em; /* tracking-wider */
+        }
+
+        tr:hover {
+            background-color: #f3f4f6; /* hover:bg-gray-50 */
+        }
+
+        /* Status colors */
+        .status-active {
+            color: #10b981; /* green-500 */
+            font-weight: 500;
+        }
+        .status-pending {
+            color: #f59e0b; /* yellow-500 */
+            font-weight: 500;
+        }
+        .status-cancelled {
+            color: #ef4444; /* red-500 */
+            font-weight: 500;
+        }
+        .status-expired {
+            color: #6b7280; /* gray-500 */
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Primary blue */
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Darker blue */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d; /* Gray */
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Darker gray */
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                border-radius: 8px;
+            }
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 25px;
+            }
+            p {
+                font-size: 0.95em;
+            }
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="common_restrictions.js"></script>
+    <div class="container">
+        <h1>Your Active Subscriptions</h1>
+
+        <div id="active-subscriptions-content">
+            <p id="no-active-message" class="hidden">You do not have any active subscriptions at the moment.</p>
+            <div class="table-container">
+                <table id="activeSubscriptionTable" class="hidden">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Plan Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activeSubscriptionTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="non-subscriber-message" style="display: none;">
+            <p>Ready to unlock premium content? Explore our plans!</p>
+        </div>
+
+        <div class="action-buttons">
+            <button id="addNewSubscriptionBtn" class="btn btn-primary">Add New Subscription</button>
+            <button id="viewAllSubscriptionsBtn" class="btn btn-secondary">View All Subscriptions</button>
+        </div>
+    </div>
+
+    <script src="active_subscription.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+/* --- Basic Setup & Variables --- */
+:root {
+    --primary-color: #6a5acd; /* SlateBlue */
+    --secondary-color: #f0f8ff; /* AliceBlue */
+    --text-color: #333;
+    --light-gray: #f4f4f4;
+    --dark-gray: #555;
+    --white-color: #fff;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif; /* Assuming Poppins is available or a fallback like sans-serif */
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- Header & Navigation (Adapted for your HTML) --- */
+header { /* Targeting the <header> element directly */
+    background-color: var(--white-color);
+    box-shadow: var(--box-shadow);
+    padding: 1rem 20px; /* Added horizontal padding for content */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    text-align: right; /* To align the nav links to the right */
+}
+
+nav { /* Targeting the <nav> element directly */
+    display: flex; /* Make the links display in a row */
+    justify-content: flex-end; /* Push content to the right end */
+    align-items: center;
+    gap: 1.5rem; /* Spacing between navigation links */
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--dark-gray);
+    font-weight: 500;
+    padding: 0.5rem 1rem; /* Add padding to make links easier to click */
+    border-radius: var(--border-radius);
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--primary-color);
+    background-color: var(--light-gray); /* Subtle background on hover */
+}
+
+
+/* --- Main Content Area --- */
+main { /* Targeting the <main> element directly */
+    padding: 4rem 20px; /* Padding for content inside main */
+    text-align: center; /* Center align the welcome text */
+    max-width: 900px; /* Limit width for readability */
+    margin: 2rem auto; /* Center the main content block */
+    background-color: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+main h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem; /* Space below the heading */
+    color: var(--primary-color);
+}
+
+main p {
+    font-size: 1.1rem;
+    color: var(--dark-gray);
+}
+
+/* --- Responsive Adjustments (Optional, but good practice for nav) --- */
+@media (max-width: 600px) { /* Adjust breakpoint as needed */
+    nav {
+        flex-direction: column; /* Stack links vertically on smaller screens */
+        align-items: center; /* Center them horizontally */
+        gap: 0.5rem; /* Reduce gap when stacked */
+    }
+
+    nav a {
+        width: 100%; /* Make links take full width */
+        text-align: center;
+        padding: 0.8rem 1rem; /* More padding for touch targets */
+    }
+
+    main {
+        padding: 2rem 15px; /* Adjust padding for smaller screens */
+        margin: 1rem auto;
+    }
+
+    main h1 {
+        font-size: 2rem;
+    }
+}
+
+

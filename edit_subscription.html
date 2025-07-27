@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Subscription</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        .form-input, .form-select {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #1f2937;
+            background-color: #f9fafb;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: #2563eb;
+            outline: 0;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background-color: #2563eb;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: background-color 0.15s ease-in-out;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            margin-top: 1rem;
+            background-color: #6b7280;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: background-color 0.15s ease-in-out;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <script src="common_restrictions.js"></script>
+    <div class="container">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Edit Subscription</h2>
+        <form id="editSubscriptionForm">
+            <input type="hidden" id="subscriptionId" name="subscriptionId">
+            <div class="mb-4">
+                <label for="userId" class="form-label">User ID</label>
+                <input type="text" id="userId" name="userId" class="form-input" placeholder="e.g., user123" required disabled> </div>
+            <div class="mb-4">
+                <label for="planName" class="form-label">Plan Name</label>
+                <input type="text" id="planName" name="planName" class="form-input" placeholder="e.g., Premium Plan" required>
+            </div>
+            <div class="mb-4">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" id="startDate" name="startDate" class="form-input" required>
+            </div>
+            <div class="mb-4">
+                <label for="endDate" class="form-label">End Date (Optional)</label>
+                <input type="date" id="endDate" name="endDate" class="form-input">
+            </div>
+            <div class="mb-4">
+                <label for="status" class="form-label">Status</label>
+                <select id="status" name="status" class="form-select" required>
+                    <option value="Active">Active</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Expired">Expired</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label for="amount" class="form-label">Amount (Optional)</label>
+                <input type="number" id="amount" name="amount" class="form-input" step="0.01" placeholder="e.g., 9.99">
+            </div>
+            <button type="submit" class="btn-primary">Update Subscription</button>
+            <button type="button" id="cancelEditBtn" class="btn-secondary">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const subscriptionId = urlParams.get('id'); // Get the ID from the URL
+        const editSubscriptionForm = document.getElementById('editSubscriptionForm');
+
+        // Custom alert function (keep as is)
+        const customAlert = (message, type = 'info') => {
+            const existingAlert = document.getElementById('custom-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            const alertDiv = document.createElement('div');
+            alertDiv.id = 'custom-alert';
+            let bgColor = 'bg-gray-600';
+            let btnColor = 'bg-blue-600';
+            let btnHoverColor = 'hover:bg-blue-700';
+
+            if (type === 'error') {
+                bgColor = 'bg-red-600';
+                btnColor = 'bg-red-700';
+                btnHoverColor = 'hover:bg-red-800';
+            } else if (type === 'success') {
+                bgColor = 'bg-green-600';
+                btnColor = 'bg-green-700';
+                btnHoverColor = 'hover:bg-green-800';
+            }
+
+            alertDiv.className = `fixed inset-0 ${bgColor} bg-opacity-50 flex items-center justify-center z-50`;
+            alertDiv.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                    <p class="text-lg font-semibold text-gray-800 mb-4">${message}</p>
+                    <button id="alert-ok-btn" class="${btnColor} ${btnHoverColor} text-white font-bold py-2 px-4 rounded-md">OK</button>
+                </div>
+            `;
+            document.body.appendChild(alertDiv);
+
+            document.getElementById('alert-ok-btn').addEventListener('click', function() {
+                alertDiv.remove();
+            });
+        };
+
+        if (!subscriptionId) {
+            customAlert('No subscription ID provided for editing.', 'error');
+            setTimeout(() => {
+                window.location.href = 'summary.html'; // Stays in frontend folder
+            }, 2000);
+            return; // Stop script execution
+        }
+
+        // Fetch the specific subscription data from the backend to populate the form
+        fetch(`../backend/get_subscriptions.php?id=${subscriptionId}`) // Corrected path to backend
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.subscriptions.length > 0) {
+                const subscriptionToEdit = data.subscriptions[0];
+                document.getElementById('subscriptionId').value = subscriptionToEdit.id;
+                document.getElementById('userId').value = subscriptionToEdit.user_id; // Display user ID
+                document.getElementById('planName').value = subscriptionToEdit.plan_name;
+                document.getElementById('startDate').value = subscriptionToEdit.start_date;
+                document.getElementById('endDate').value = subscriptionToEdit.end_date === null ? '' : subscriptionToEdit.end_date;
+                document.getElementById('status').value = subscriptionToEdit.status;
+                document.getElementById('amount').value = subscriptionToEdit.amount === null ? '' : parseFloat(subscriptionToEdit.amount);
+            } else {
+                customAlert('Subscription not found or you do not have permission.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'summary.html'; // Stays in frontend folder
+                }, 2000);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching subscription for edit:', error);
+            customAlert('An error occurred while loading subscription details.', 'error');
+            setTimeout(() => {
+                window.location.href = 'summary.html'; // Stays in frontend folder
+            }, 2000);
+        });
+
+        // Add event listener for form submission
+        editSubscriptionForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData();
+            formData.append('action', 'edit');
+            formData.append('id', document.getElementById('subscriptionId').value);
+            // formData.append('userId', document.getElementById('userId').value); // User ID is handled by session on backend
+            formData.append('planName', document.getElementById('planName').value);
+            formData.append('startDate', document.getElementById('startDate').value);
+            formData.append('endDate', document.getElementById('endDate').value);
+            formData.append('status', document.getElementById('status').value);
+            formData.append('amount', document.getElementById('amount').value);
+
+            fetch('../backend/manage_subscription.php', { // Corrected path to backend
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    customAlert('Subscription updated successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'summary.html'; // Stays in frontend folder
+                    }, 1500);
+                } else {
+                    customAlert('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                customAlert('An error occurred while updating the subscription.', 'error');
+            });
+        });
+
+        // Add event listener for the Cancel button
+        document.getElementById('cancelEditBtn').addEventListener('click', function() {
+            window.location.href = 'summary.html'; // Stays in frontend folder
+        });
+    });
+</script>
+</body>
+</html>

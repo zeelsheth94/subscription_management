@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles & Font Configuration -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* A light gray background */
+        }
+        /* Custom style for the toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #4f46e5; /* Indigo */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #4f46e5; /* Indigo */
+        }
+        /* Hide scrollbar for the body when modal is open */
+        .modal-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex items-center justify-center p-4">
+        
+        <div class="w-full max-w-3xl mx-auto">
+            
+            <header class="mb-8 text-center">
+                <h1 class="text-3xl font-bold text-gray-900">Account Settings</h1>
+                <p class="text-md text-gray-500 mt-1">Manage your profile, notifications, and account preferences.</p>
+            </header>
+
+            <div class="space-y-8">
+                <!-- Profile Details Section -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Profile Details</h2>
+                    <form id="profileForm" class="space-y-6" novalidate>
+                        <!-- Profile Picture -->
+                        <div class="flex items-center space-x-4">
+                            <img id="profileImage" class="h-20 w-20 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=User" alt="User profile picture" onerror="this.onerror=null;this.src='https://placehold.co/100x100/E2E8F0/4A5568?text=Error';">
+                            <div>
+                                <label for="file-upload" class="cursor-pointer rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                    <span>Change Picture</span>
+                                    <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/png, image/jpeg, image/gif">
+                                </label>
+                                <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 5MB.</p>
+                            </div>
+                        </div>
+
+                        <!-- Form Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="fullName" class="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
+                                <div class="mt-2">
+                                    <input type="text" id="fullName" name="fullName" value="Alex Doe" required class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email Address</label>
+                                <div class="mt-2">
+                                    <input type="email" id="email" name="email" value="alex.doe@example.com" required class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                    <p id="emailError" class="text-xs text-red-500 mt-1 hidden">Please enter a valid email address.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="bio" class="block text-sm font-medium leading-6 text-gray-900">Bio</label>
+                            <div class="mt-2">
+                                <textarea id="bio" name="bio" rows="3" class="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">Loves designing beautiful and intuitive user interfaces.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="flex justify-end pt-4">
+                            <button id="saveChangesBtn" type="submit" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Email Notifications Section -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Notifications</h2>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-base font-medium text-gray-900">Email Reminders</h3>
+                            <p class="text-sm text-gray-500">Get notified about important account activity.</p>
+                        </div>
+                        <!-- Toggle Switch -->
+                        <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" id="emailToggle" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer" checked role="switch" aria-checked="true"/>
+                            <label for="emailToggle" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log Out Section -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                     <h2 class="text-xl font-bold text-gray-900 mb-4">Account Actions</h2>
+                    <div class="flex items-center justify-between">
+                        <div>
+                           <h3 class="text-base font-medium text-gray-900">Log Out</h3>
+                           <p class="text-sm text-gray-500">Log out of your account on this device.</p>
+                        </div>
+                        <button id="logoutButton" class="rounded-md bg-white px-4 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-red-50">
+                            Log Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform -translate-y-10 transition-all duration-300" role="alert" aria-live="assertive">
+        <p id="toast-message"></p>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Log Out</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">Are you sure you want to log out of your account?</p>
+                </div>
+                <div class="items-center px-4 py-3 space-x-4">
+                    <button id="cancelLogout" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button id="confirmLogout" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Element Selections ---
+            const profileForm = document.getElementById('profileForm');
+            const saveChangesBtn = document.getElementById('saveChangesBtn');
+            const fileUpload = document.getElementById('file-upload');
+            const profileImage = document.getElementById('profileImage');
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailToggle = document.getElementById('emailToggle');
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogout = document.getElementById('cancelLogout');
+            const confirmLogout = document.getElementById('confirmLogout');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+
+            // --- Utility Functions ---
+
+            // Function to show a toast notification
+            function showToast(message, isSuccess = true) {
+                toastMessage.textContent = message;
+                toast.className = toast.className.replace(/bg-\w+-\d+/, isSuccess ? 'bg-green-500' : 'bg-red-500');
+                toast.classList.remove('opacity-0', '-translate-y-10');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                    toast.classList.add('opacity-0', '-translate-y-10');
+                }, 3000);
+            }
+
+            // Function to validate email format
+            function validateEmail(email) {
+                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+            // --- Event Listeners ---
+
+            // 1. Handle Profile Form Submission
+            profileForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Validate email before submission
+                if (!validateEmail(emailInput.value)) {
+                    emailError.classList.remove('hidden');
+                    emailInput.focus();
+                    showToast('Please fix the errors before saving.', false);
+                    return;
+                }
+                emailError.classList.add('hidden');
+
+                // Simulate saving with a loading state
+                saveChangesBtn.disabled = true;
+                saveChangesBtn.textContent = 'Saving...';
+
+                setTimeout(() => {
+                    console.log('Profile form submitted. Implement save logic here.');
+                    showToast('Profile updated successfully!');
+                    saveChangesBtn.disabled = false;
+                    saveChangesBtn.textContent = 'Save Changes';
+                }, 1500); // Simulate network delay
+            });
+
+            // 2. Handle Profile Picture Upload Preview & Validation
+            fileUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    // Check file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('File is too large. Max 5MB.', false);
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImage.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                    showToast('Picture selected. Click "Save" to apply.');
+                }
+            });
+            
+            // 3. Real-time email validation
+            emailInput.addEventListener('input', () => {
+                if (validateEmail(emailInput.value)) {
+                    emailError.classList.add('hidden');
+                }
+            });
+
+            // 4. Handle Notification Toggle
+            emailToggle.addEventListener('change', function() {
+                const status = this.checked ? 'enabled' : 'disabled';
+                this.setAttribute('aria-checked', this.checked);
+                console.log(`Email reminders ${status}.`);
+                showToast(`Email reminders ${status}.`);
+            });
+
+            // 5. Handle Logout Modal
+            logoutButton.addEventListener('click', () => {
+                logoutModal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            });
+
+            cancelLogout.addEventListener('click', () => {
+                logoutModal.classList.add('hidden');
+                 document.body.classList.remove('modal-open');
+            });
+
+            confirmLogout.addEventListener('click', () => {
+                logoutModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+                console.log('Logout confirmed. Implement logout logic here.');
+                showToast('Logging you out...');
+                
+                setTimeout(() => {
+                    // In a real app: window.location.href = '/login';
+                    console.log("Redirecting to login page...");
+                }, 1500);
+            });
+        });
+    </script>
+
+</body>
+</html>

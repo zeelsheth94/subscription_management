@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        .container { max-width: 400px; width: 100%; background-color: #ffffff; padding: 2rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151; }
+        .form-input, .form-select { display: block; width: 100%; padding: 0.75rem 1rem; margin-bottom: 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; color: #1f2937; background-color: #f9fafb; transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
+        .form-input:focus, .form-select:focus { border-color: #2563eb; outline: 0; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25); }
+        .btn-primary { width: 100%; padding: 0.75rem 1.5rem; background-color: #2563eb; color: #ffffff; font-weight: 600; border-radius: 0.5rem; transition: background-color 0.15s ease-in-out; cursor: pointer; border: none; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .text-link { color: #2563eb; text-decoration: none; transition: color 0.15s ease-in-out; }
+        .text-link:hover { color: #1d4ed8; }
+        .message { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 0.5rem; font-weight: 500; text-align: center; }
+        .message.success { background-color: #d1fae5; color: #065f46; border: 1px solid #34d399; }
+        .message.error { background-color: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
+        <form id="loginForm">
+            <div class="mb-4">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Your username" required>
+            </div>
+            <div class="mb-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Your password" required>
+            </div>
+            <button type="submit" class="btn-primary">Login</button>
+            <p class="text-center text-gray-600 text-sm mt-4">
+                Don't have an account? <a href="register.html" class="text-link">Register here</a>
+            </p>
+            <div id="loginMessage" class="message hidden"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginMessage = document.getElementById('loginMessage');
+
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+
+            fetch('../backend/login.php', { // Corrected path to backend
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loginMessage.classList.remove('hidden', 'success', 'error');
+                if (data.success) {
+                    loginMessage.textContent = data.message;
+                    loginMessage.classList.add('success');
+                    sessionStorage.setItem('isLoggedIn', 'true'); // Set login flag
+                    setTimeout(() => {
+                        window.location.href = 'home.html'; // Stays in frontend folder
+                    }, 1000);
+                } else {
+                    loginMessage.textContent = data.message;
+                    loginMessage.classList.add('error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loginMessage.classList.remove('hidden', 'success');
+                loginMessage.classList.add('error');
+                loginMessage.textContent = 'An error occurred during login.';
+            });
+        });
+    </script>
+</body>
+</html>

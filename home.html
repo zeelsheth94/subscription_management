@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <script src="common_restrictions.js"></script>
+
+    <header class="header">
+        <div class="container">
+            <a href="home.html" class="logo">Subscrip.</a>
+            <nav class="navbar">
+                <ul class="nav-list">
+                    <li><a href="active_subscription.html"><span class="material-symbols-outlined">subscriptions</span> Active Subscriptions</a></li>
+                    <li><a href="upcoming_payment.html"><span class="material-symbols-outlined">payment</span> Upcoming Payments</a></li>
+                    <li><a href="setting.html"><span class="material-symbols-outlined">settings</span> Settings</a></li>
+                    <li><a href="../backend/logout.php"><span class="material-symbols-outlined">logout</span> Logout</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Welcome Back, Alex!</h1> <p>Here's a quick overview of your account.</p>
+            </div>
+        </section>
+
+        <section id="dashboard" class="dashboard-section">
+            <div class="container">
+                <div class="card" id="subscriptions">
+                    <div class="card-header">
+                        <h2><span class="material-symbols-outlined">subscriptions</span> Active Subscriptions</h2>
+                        <span class="count">3</span>
+                    </div>
+                    <div class="card-body">
+                        <p>You have 3 active subscriptions this month.</p>
+                        <a href="active_subscription.html" class="btn">Manage Subscriptions</a>
+                    </div>
+                </div>
+
+                <div class="card" id="payments">
+                    <div class="card-header">
+                        <h2><span class="material-symbols-outlined">payment</span> Upcoming Payments</h2>
+                        <span class="count">75.99</span>
+                    </div>
+                    <div class="card-body">
+                        <p>Total due in the next 30 days.</p>
+                        <a href="upcoming_payment.html" class="btn">View Details</a>
+                    </div>
+                </div>
+
+                <div class="card" id="summary">
+                    <div class="card-header">
+                        <h2><span class="material-symbols-outlined">description</span> Subscription Summary</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>View a summary of all your subscriptions.</p>
+                        <a href="summary.html" class="btn">View Summary</a>
+                    </div>
+                </div>
+
+                <div class="card" id="add_Subscription">
+                    <div class="card-header">
+                        <h2><span class="material-symbols-outlined">add_circle</span> Add Subscription</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>Add new subscription</p>
+                        <a href="add_subscription.html" class="btn">ADD</a>
+                    </div>
+                </div>
+
+                <div class="card" id="edit_Subscription">
+                    <div class="card-header">
+                        <h2><span class="material-symbols-outlined">edit</span> Edit Subscription</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>Update Your subscription Details</p>
+                        <a href="summary.html" class="btn">Edit</a>
+                    </div>
+                </div>
+
+                <div class="card" id="delete_Subscription">
+                    <div class="card-header">
+                        <h2><span class="material-symbols-outlined">delete</span> Delete Subscription</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>Delete Your subscription Details</p>
+                        <a href="summary.html" class="btn">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navbar = document.querySelector('.navbar');
+
+            if (hamburger && navbar) {
+                hamburger.addEventListener('click', () => {
+                    navbar.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

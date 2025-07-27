@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Summary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            color: #374151;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            color: #1f2937;
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .search-add-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #1f2937;
+            background-color: #f9fafb;
+        }
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background-color: #f9fafb;
+            color: #1f2937;
+            cursor: pointer;
+        }
+        .btn-add {
+            background-color: #22c55e; /* green-500 */
+            color: #ffffff;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.15s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-add:hover {
+            background-color: #16a34a; /* green-600 */
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures rounded corners on table */
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb; /* gray-200 */
+            font-size: 0.9rem;
+        }
+        th {
+            background-color: #f9fafb; /* gray-50 */
+            font-weight: 600;
+            color: #4b5563; /* gray-700 */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        tbody tr:hover {
+            background-color: #f3f4f6; /* gray-50 on hover */
+        }
+        .action-btns button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-right: 0.75rem;
+            transition: color 0.2s ease;
+        }
+        .action-btns button:last-child {
+            margin-right: 0;
+        }
+        .action-btns .edit-btn {
+            color: #2563eb; /* blue-600 */
+        }
+        .action-btns .edit-btn:hover {
+            color: #1d4ed8; /* blue-700 */
+        }
+        .action-btns .delete-btn {
+            color: #ef4444; /* red-500 */
+        }
+        .action-btns .delete-btn:hover {
+            color: #dc2626; /* red-600 */
+        }
+        .no-subscriptions {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
+        .status-active { color: #10b981; font-weight: 500; }
+        .status-pending { color: #f59e0b; font-weight: 500; }
+        .status-cancelled { color: #ef4444; font-weight: 500; }
+        .status-expired { color: #6b7280; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .search-add-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-input, .filter-select, .btn-add {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="common_restrictions.js"></script>
+    <div class="container">
+        <h1>All Your Subscriptions</h1>
+
+        <div class="search-add-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by plan name or status...">
+            <select id="statusFilter" class="filter-select">
+                <option value="all">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Expired">Expired</option>
+            </select>
+            <a href="add_subscription.html" class="btn-add">
+                <i class="fas fa-plus-circle"></i> Add New
+            </a>
+        </div>
+
+        <div class="table-container">
+            <table id="subscriptionsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Plan Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="subscriptionsTableBody">
+                    </tbody>
+            </table>
+            <p id="noSubscriptionsMessage" class="no-subscriptions hidden">No subscriptions found.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const subscriptionsTableBody = document.getElementById('subscriptionsTableBody');
+            const noSubscriptionsMessage = document.getElementById('noSubscriptionsMessage');
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+
+            const customAlert = (message, type = 'info') => {
+                const existingAlert = document.getElementById('custom-alert');
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+
+                const alertDiv = document.createElement('div');
+                alertDiv.id = 'custom-alert';
+                let bgColor = 'bg-gray-600';
+                let btnColor = 'bg-blue-600';
+                let btnHoverColor = 'hover:bg-blue-700';
+
+                if (type === 'error') {
+                    bgColor = 'bg-red-600';
+                    btnColor = 'bg-red-700';
+                    btnHoverColor = 'hover:bg-red-800';
+                } else if (type === 'success') {
+                    bgColor = 'bg-green-600';
+                    btnColor = 'bg-green-700';
+                    btnHoverColor = 'hover:bg-green-800';
+                }
+
+                alertDiv.className = `fixed inset-0 ${bgColor} bg-opacity-50 flex items-center justify-center z-50`;
+                alertDiv.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                        <p class="text-lg font-semibold text-gray-800 mb-4">${message}</p>
+                        <button id="alert-ok-btn" class="${btnColor} ${btnHoverColor} text-white font-bold py-2 px-4 rounded-md">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(alertDiv);
+
+                document.getElementById('alert-ok-btn').addEventListener('click', function() {
+                    alertDiv.remove();
+                });
+            };
+
+
+            function fetchSubscriptions() {
+                const searchTerm = searchInput.value;
+                const filterStatus = statusFilter.value;
+
+                let url = `../backend/get_subscriptions.php?`;
+                if (filterStatus !== 'all') {
+                    url += `status=${filterStatus}&`;
+                }
+                if (searchTerm) {
+                    url += `search=${searchTerm}&`;
+                }
+                // Remove trailing '&' or '?'
+                url = url.endsWith('&') ? url.slice(0, -1) : url;
+                url = url.endsWith('?') ? url.slice(0, -1) : url;
+
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        subscriptionsTableBody.innerHTML = ''; // Clear existing rows
+                        if (data.success && data.subscriptions.length > 0) {
+                            noSubscriptionsMessage.classList.add('hidden');
+                            data.subscriptions.forEach(sub => {
+                                const row = subscriptionsTableBody.insertRow();
+                                row.insertCell().textContent = sub.id;
+                                row.insertCell().textContent = sub.plan_name;
+                                row.insertCell().textContent = sub.start_date;
+                                row.insertCell().textContent = sub.end_date || 'N/A'; // Handle null end_date
+                                const statusCell = row.insertCell();
+                                statusCell.textContent = sub.status;
+                                statusCell.className = `status-${sub.status.toLowerCase()}`; // Add status class
+                                row.insertCell().textContent = sub.amount !== null ? `₹${parseFloat(sub.amount).toFixed(2)}` : 'N/A';
+
+                                const actionsCell = row.insertCell();
+                                actionsCell.className = 'action-btns';
+
+                                const editButton = document.createElement('button');
+                                editButton.innerHTML = '<i class="fas fa-edit"></i>';
+                                editButton.className = 'edit-btn';
+                                editButton.title = 'Edit Subscription';
+                                editButton.onclick = () => {
+                                    window.location.href = `edit_subscription.html?id=${sub.id}`; // Stays in frontend folder
+                                };
+                                actionsCell.appendChild(editButton);
+
+                                const deleteButton = document.createElement('button');
+                                deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                                deleteButton.className = 'delete-btn';
+                                deleteButton.title = 'Delete Subscription';
+                                deleteButton.onclick = () => {
+                                    if (confirm('Are you sure you want to delete this subscription?')) {
+                                        deleteSubscription(sub.id);
+                                    }
+                                };
+                                actionsCell.appendChild(deleteButton);
+                            });
+                        } else {
+                            noSubscriptionsMessage.classList.remove('hidden');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching subscriptions:', error);
+                        noSubscriptionsMessage.classList.remove('hidden');
+                        noSubscriptionsMessage.textContent = 'Failed to load subscriptions. Please try again.';
+                    });
+            }
+
+            function deleteSubscription(id) {
+                const formData = new FormData();
+                formData.append('action', 'delete');
+                formData.append('id', id);
+
+                fetch('../backend/manage_subscription.php', { // Corrected path to backend
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        customAlert('Subscription deleted successfully!', 'success');
+                        fetchSubscriptions(); // Re-fetch to update the table
+                    } else {
+                        customAlert('Error: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting subscription:', error);
+                    customAlert('An error occurred while deleting the subscription.', 'error');
+                });
+            }
+
+            // Initial fetch
+            fetchSubscriptions();
+
+            // Event listeners for search and filter
+            searchInput.addEventListener('input', fetchSubscriptions);
+            statusFilter.addEventListener('change', fetchSubscriptions);
+        });
+    </script>
+</body>
+</html>
